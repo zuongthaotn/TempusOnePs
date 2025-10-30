@@ -6,3 +6,5 @@ venv
 *.pyc
 .DS_store
 .vscode
+config/config.json
+**-private.py

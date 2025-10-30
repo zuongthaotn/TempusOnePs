@@ -1,0 +1,38 @@
+{
+	"cron": "*/5 * * * *",
+	"pipeline": {
+		"data": [
+			{
+				"name": "example_data_service",
+				"class": "ExampleDataService",
+				"enabled": true
+			}
+		],
+		"signals": [
+			{
+				"name": "rsi_signal_service",
+				"class": "RsiSignalService",
+				"enabled": true
+			},
+			{
+				"name": "macd_signal_service",
+				"class": "MacdSignalService",
+				"enabled": true
+			}
+		],
+		"execution": [
+			{
+				"name": "example_execution_service",
+				"class": "ExampleExecutionService",
+				"enabled": true
+			}
+		],
+		"log": [
+			{
+				"name": "example_log_service",
+				"class": "ExampleLogService",
+				"enabled": true
+			}
+		]
+	}
+}
