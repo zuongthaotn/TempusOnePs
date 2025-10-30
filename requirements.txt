@@ -2,3 +2,5 @@ aiocron
 numpy
 pandas
 pandas-ta
+requests
+dateutil

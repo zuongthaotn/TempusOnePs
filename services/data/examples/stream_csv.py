@@ -22,7 +22,8 @@ class DataServiceExampleCsv(BaseServicePlugin):
             self.df = pd.read_csv(
                 "https://raw.githubusercontent.com/zuongthaotn/vn-stock-data/main/VN30ps/VN30F1M_5minutes.csv",
                 index_col='Date', parse_dates=True)
-        await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Start steaming data from csv({len(self.df)} rows)")
+        await self.bus.publish(EventName.LOG_ADD,
+                               f"Data plugin [{self.name}] start steaming data from csv({len(self.df)} rows)")
 
     async def run(self):
         start_row = self.start_from

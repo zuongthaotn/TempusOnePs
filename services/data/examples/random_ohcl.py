@@ -33,6 +33,6 @@ class DataServiceExampleRandom(BaseServicePlugin):
 
     async def run(self):
         df = random_ohlc_df(periods=50, freq="5min")
-        data = {"symbol": "BTCUSDT", "df": df}
+        data = {"service_name": self.name, "event_name": EventName.DATA_NEW, "symbol": "BTCUSDT", "df": df}
         print(f"[{self.name}] generated new dataframe")
         await self.bus.publish(EventName.DATA_NEW, data)
