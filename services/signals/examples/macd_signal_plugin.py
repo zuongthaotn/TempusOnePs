@@ -6,11 +6,12 @@ import pandas_ta as ta
 
 class MacdSignalPlugin(BaseServicePlugin):
     async def setup(self):
-        print(f"Signal plugin [{self.name}] initialized and subscribe {EventName.DATA_NEW}")
+        await self.bus.publish(EventName.LOG_ADD,
+                               f"Signal plugin [{self.name}] initialized and subscribe {EventName.DATA_NEW}")
         self.bus.subscribe(EventName.DATA_NEW, self.find_signal)
 
     async def find_signal(self, market_data):
-        print(f"Finding MACD signal for {market_data['symbol']}")
+        await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Finding MACD signal for {market_data['symbol']}")
         data = market_data['df']
         macd = ta.macd(data["Close"], fast=12, slow=26, signal=9)
         data = pd.concat([data, macd], axis=1)
@@ -27,4 +28,5 @@ class MacdSignalPlugin(BaseServicePlugin):
         elif last_data["Sell_Signal"] > 70:
             signal = {"plugin": self.name, "symbol": market_data["symbol"], "signal": "SELL"}
         await self.bus.publish(EventName.SIGNAL_GENERATED, signal)
-
+        await self.bus.publish(EventName.LOG_ADD,
+                               f"Signal plugin [{self.name}] dispatched")

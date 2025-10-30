@@ -5,7 +5,7 @@ from collections import defaultdict
 class EventName:
     DATA_NEW = "data.new"
     SIGNAL_GENERATED = "signal.generated"
-    ORDER_FILLED = "order.filled"
+    ORDER_NEW = "order.new"
     LOG_ADD = "log.add"
 
 
