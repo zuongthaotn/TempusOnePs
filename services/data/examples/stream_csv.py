@@ -12,7 +12,7 @@ class DataServiceExampleCsv(BaseServicePlugin):
         super(DataServiceExampleCsv, self).__init__(name, event_bus, config=config)
 
     async def setup(self):
-        await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Data plugin initialized.")
+        await self.bus.publish(EventName.LOG_ADD, f"Data plugin [{self.name}] initialized.")
         current_folder = os.path.dirname(os.path.abspath(__file__))
         csv_file = current_folder + "/" + self.csv_file
         is_file = os.path.isfile(csv_file)
@@ -28,8 +28,10 @@ class DataServiceExampleCsv(BaseServicePlugin):
         start_row = self.start_from
         to_row = start_row + 50
         if to_row < len(self.df):
+            self.start_from = self.start_from + 1
             subset = self.df.iloc[start_row: to_row]
-            market_data = {"symbol": "VN30F1M", "df": subset}
-            await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Get new dataframe")
-            await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] {subset.index[-1]}")
-            await self.bus.publish(EventName.DATA_NEW, market_data)
+            event_data = {"service_name": self.name, "event_name": EventName.DATA_NEW,
+                          "symbol": "VN30F1M", "df": subset}
+            # await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Get new dataframe")
+            # await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] {subset.index[-1]}")
+            await self.bus.publish(EventName.DATA_NEW, event_data)

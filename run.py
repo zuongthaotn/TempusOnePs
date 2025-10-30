@@ -16,17 +16,17 @@ async def main():
 
     # Pipeline flow
     async def run_pipeline():
-        for s in services.get("data", []):
-            await s.run()
+        for se in services.get("data", []):
+            await se.run()
 
-        for s in services.get("signals", []):
-            await s.run()
+        for se in services.get("signals", []):
+            await se.run()
 
-        for s in services.get("execution", []):
-            await s.run()
+        for se in services.get("execution", []):
+            await se.run()
 
-        for s in services.get("log", []):
-            await s.run()
+        for se in services.get("log", []):
+            await se.run()
 
     cron_expr = config.get("cron")
     interval = config.get("interval", None)

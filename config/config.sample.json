@@ -1,36 +1,36 @@
 {
-	"cron": "*/5 * * * *",
+	"cron": "*/1 * * * *",
 	"pipeline": {
+		"log": [
+			{
+				"name": "examples.print_msg",
+				"class": "ExampleLogPrintService",
+				"enabled": true
+			}
+		],
 		"data": [
 			{
-				"name": "example_data_service",
-				"class": "ExampleDataService",
+				"name": "examples.stream_csv",
+				"class": "DataServiceExampleCsv",
 				"enabled": true
 			}
 		],
 		"signals": [
 			{
-				"name": "rsi_signal_service",
-				"class": "RsiSignalService",
+				"name": "examples.rsi_signal_plugin",
+				"class": "RsiSignalPlugin",
 				"enabled": true
 			},
 			{
-				"name": "macd_signal_service",
-				"class": "MacdSignalService",
+				"name": "examples.macd_signal_plugin",
+				"class": "MacdSignalPlugin",
 				"enabled": true
 			}
 		],
 		"execution": [
 			{
-				"name": "example_execution_service",
+				"name": "examples.just_log",
 				"class": "ExampleExecutionService",
-				"enabled": true
-			}
-		],
-		"log": [
-			{
-				"name": "example_log_service",
-				"class": "ExampleLogService",
 				"enabled": true
 			}
 		]

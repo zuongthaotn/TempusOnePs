@@ -10,16 +10,17 @@ class RsiSignalPlugin(BaseServicePlugin):
         self.bus.subscribe(EventName.DATA_NEW, self.find_signal)
 
     async def find_signal(self, market_data):
-        await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Finding RSI signal for {market_data['symbol']}")
+        # await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Finding RSI signal for {market_data['symbol']}")
         df = market_data['df']
         df["RSI_14"] = ta.rsi(df["Close"], length=14)
         last_row = df.iloc[-1]
-        signal = {"plugin": self.name, "symbol": market_data["symbol"], "signal": ""}
+        signal = {"service_name": self.name, "event_name": EventName.SIGNAL_GENERATED,
+                  "symbol": market_data["symbol"], "signal": None}
         # RSI logic
         if last_row["RSI_14"] < 30:
-            signal = {"plugin": self.name, "symbol": market_data["symbol"], "signal": "BUY"}
+            signal["signal"] = "BUY"
         elif last_row["RSI_14"] > 70:
-            signal = {"plugin": self.name, "symbol": market_data["symbol"], "signal": "SELL"}
+            signal["signal"] = "SELL"
         await self.bus.publish(EventName.SIGNAL_GENERATED, signal)
-        await self.bus.publish(EventName.LOG_ADD,
-                               f"Signal plugin [{self.name}] dispatched")
+        # await self.bus.publish(EventName.LOG_ADD,
+        #                        f"Signal plugin [{self.name}] dispatched")

@@ -9,3 +9,7 @@ venv
 .vscode
 config/config.json
 **-private.py
+# Ignore all modules
+modules/*
+# But keep default module
+!modules/default/
