@@ -1,4 +1,4 @@
-class BasePluginService:
+class BaseServicePlugin:
     def __init__(self, name, event_bus, config=None):
         self.name = name
         self.bus = event_bus

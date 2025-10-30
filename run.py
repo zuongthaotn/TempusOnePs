@@ -1,6 +1,7 @@
 import asyncio
+from core.utils import load_config
 from core.event_bus import event_bus
-from core.service_loader import load_config, load_services
+from core.service_loader import load_services
 from core.scheduler import Scheduler
 
 

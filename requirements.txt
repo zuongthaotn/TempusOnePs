@@ -1,1 +1,4 @@
 aiocron
+numpy
+pandas
+pandas-ta

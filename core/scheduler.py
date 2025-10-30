@@ -1,6 +1,7 @@
 import aiocron
 import asyncio
 
+
 class Scheduler:
     def __init__(self, interval=None, cron_expr=None, callback=None):
         self.interval = interval
