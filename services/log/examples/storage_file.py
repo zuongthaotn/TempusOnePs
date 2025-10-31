@@ -15,7 +15,7 @@ class ExampleLogFileService(BaseServicePlugin):
         current_folder = os.path.dirname(os.path.abspath(__file__))
         log_file = current_folder + "/example.log"
         self.log_file = await aiofiles.open(log_file, "a", encoding="utf-8")
-        await self.write_log("\n" + banner + "\n")
+        await self.write_log(banner + "\n")
         await self.write_log("[SYSTEM] 🚀 Starting TempusOne Engine...")
         events = []
         for name in dir(EventName):
