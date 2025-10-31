@@ -5,13 +5,12 @@ def load_services(config, event_bus):
     services = {}
     for group_name, group_list in config["pipeline"].items():
         loaded = []
-        for s in group_list:
-            if not s.get("enabled", True):
+        for service in group_list:
+            if not service.get("enabled", True):
                 continue
-            module_path = f"services.{group_name}.{s['name']}"
-            module = importlib.import_module(module_path)
-            service_class = getattr(module, s["class"])
-            service_instance = service_class(s["name"], event_bus, config=s)
+            module = importlib.import_module(service['path'])
+            service_class = getattr(module, service["class"])
+            service_instance = service_class(service["name"], event_bus, config=service)
             loaded.append(service_instance)
         services[group_name] = loaded
     return services

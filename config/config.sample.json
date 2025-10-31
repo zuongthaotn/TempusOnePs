@@ -4,6 +4,7 @@
 		"log": [
 			{
 				"name": "examples.print_msg",
+				"path": "services.log.examples.print_msg",
 				"class": "ExampleLogPrintService",
 				"enabled": true
 			}
@@ -11,6 +12,7 @@
 		"data": [
 			{
 				"name": "examples.stream_csv",
+				"path": "services.data.examples.stream_csv",
 				"class": "DataServiceExampleCsv",
 				"enabled": true
 			}
@@ -18,11 +20,13 @@
 		"signals": [
 			{
 				"name": "examples.rsi_signal_plugin",
+				"path": "services.signals.examples.rsi_signal_plugin",
 				"class": "RsiSignalPlugin",
 				"enabled": true
 			},
 			{
 				"name": "examples.macd_signal_plugin",
+				"path": "services.signals.examples.macd_signal_plugin",
 				"class": "MacdSignalPlugin",
 				"enabled": true
 			}
@@ -30,6 +34,7 @@
 		"execution": [
 			{
 				"name": "examples.just_log",
+				"path": "services.execution.examples.just_log",
 				"class": "ExampleExecutionService",
 				"enabled": true
 			}

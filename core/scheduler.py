@@ -11,7 +11,7 @@ class Scheduler:
 
     async def start(self):
         if self.cron_expr:
-            print(f"⏰ Using cron schedule: {self.cron_expr}")
+            print(f"⏰ Using cron schedule: \"{self.cron_expr}\"")
             self.cron_job = aiocron.crontab(self.cron_expr, func=self.callback)
             while True:
                 await asyncio.sleep(3600)
