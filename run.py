@@ -33,5 +33,10 @@ async def main():
     scheduler = Scheduler(interval=interval, cron_expr=cron_expr, callback=run_pipeline)
     await scheduler.start()
 
+    # Final phase
+    for group in services.values():
+        for st in group:
+            await st.teardown()
+
 if __name__ == "__main__":
     asyncio.run(main())

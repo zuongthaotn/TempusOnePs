@@ -15,3 +15,6 @@ class BaseServicePlugin:
     async def handle_event(self, event_name, data):
         """Đăng ký xử lý event"""
         pass
+
+    async def teardown(self):
+        pass

@@ -1,5 +1,6 @@
 from services.base_service import BaseServicePlugin
 from core.event_bus import EventName
+from datetime import datetime
 
 
 class ExampleLogPrintService(BaseServicePlugin):
@@ -15,18 +16,21 @@ class ExampleLogPrintService(BaseServicePlugin):
 
     @staticmethod
     async def do_trigger(msg):
+        cur_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if isinstance(msg, str):
-            print(f"Log msg: {msg}")
+            print(f"{cur_time} Log msg: {msg}")
         else:
             if msg['event_name'] == EventName.DATA_NEW:
                 if len(msg['df']):
-                    print(f"Log msg: [{msg['service_name']}] [{msg['event_name']}] Get new dataframe")
-                    print(f"Log msg: [{msg['service_name']}] [{msg['event_name']}] Last date is {msg['df'].index[-1]}")
+                    print(f"{cur_time} Log msg: [{msg['service_name']}] [{msg['event_name']}] Get new dataframe")
+                    print(f"{cur_time} Log msg: [{msg['service_name']}] "
+                          f"[{msg['event_name']}] Last date is {msg['df'].index[-1]}")
                 else:
-                    print(f"Log msg: [{msg['service_name']}] [{msg['event_name']}] Got issue when getting new data")
+                    print(f"{cur_time} Log msg: [{msg['service_name']}] "
+                          f"[{msg['event_name']}] Got issue when getting new data")
             elif msg['event_name'] == EventName.SIGNAL_GENERATED:
-                print(f"Log msg: [{msg['service_name']}] [{msg['event_name']}] dispatched. "
+                print(f"{cur_time} Log msg: [{msg['service_name']}] [{msg['event_name']}] dispatched. "
                       f"Symbol: {msg['symbol']}. Signal: {msg['signal']}")
             elif msg['event_name'] == EventName.ORDER_NEW:
-                print(f"Log msg: [{msg['service_name']}] [{msg['event_name']}] dispatched. "
+                print(f"{cur_time} Log msg: [{msg['service_name']}] [{msg['event_name']}] dispatched. "
                       f"call API & created new order")

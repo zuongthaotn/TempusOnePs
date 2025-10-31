@@ -5,6 +5,7 @@ venv
 **/__pycache__/
 *.pyc
 *.csv
+*.log
 .DS_store
 .vscode
 config/config.json
