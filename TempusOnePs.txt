@@ -1,0 +1,38 @@
+# TempusOnePs
+ ________                                                      ______                       _______
+/        |                                                    /      \                     /       \
+$$$$$$$$/______   _____  ____    ______   __    __   _______ /$$$$$$  | _______    ______  $$$$$$$  | _______
+   $$ | /      \ /     \/    \  /      \ /  |  /  | /       |$$ |  $$ |/       \  /      \ $$ |__$$ |/       |
+   $$ |/$$$$$$  |$$$$$$ $$$$  |/$$$$$$  |$$ |  $$ |/$$$$$$$/ $$ |  $$ |$$$$$$$  |/$$$$$$  |$$    $$//$$$$$$$/
+   $$ |$$    $$ |$$ | $$ | $$ |$$ |  $$ |$$ |  $$ |$$      \ $$ |  $$ |$$ |  $$ |$$    $$ |$$$$$$$/ $$      \
+   $$ |$$$$$$$$/ $$ | $$ | $$ |$$ |__$$ |$$ \__$$ | $$$$$$  |$$ \__$$ |$$ |  $$ |$$$$$$$$/ $$ |      $$$$$$  |
+   $$ |$$       |$$ | $$ | $$ |$$    $$/ $$    $$/ /     $$/ $$    $$/ $$ |  $$ |$$       |$$ |     /     $$/
+   $$/  $$$$$$$/ $$/  $$/  $$/ $$$$$$$/   $$$$$$/  $$$$$$$/   $$$$$$/  $$/   $$/  $$$$$$$/ $$/      $$$$$$$/
+                               $$ |                                              Quant & Algo Trading Platform
+                               $$ |
+                               $$/
+--------------------------------------------------------------------------------------------------------------
+## System structures
+📦 TempusOnePs/
+│
+├── config/
+│   └── config.json               # define pipeline(files & Classes) and time interval
+│
+├── core/
+│   ├── event_bus.py              # publish/subscribe events
+│   ├── scheduler.py              # Job loop / 5-min timer
+│   └── service_loader.py         # load service dynamically
+│   └── utils.py                  # read config and some other core functions
+│
+├── services/
+│   ├── base_service.py           # Base class for all service
+│   ├── data                      # fetch & update data
+│   ├── signals                   # generate trading signals
+│   ├── execution                 # simulate or send order, create deal
+│   ├── log                       # store logs or push to DB
+│   └── monitoring                # optional: collect metrics, dashboard, chart, analytics
+│
+└── run.py                        # entrypoint
+├── requirements.txt
+├── pyproject.toml or setup.py
+└── README.md
