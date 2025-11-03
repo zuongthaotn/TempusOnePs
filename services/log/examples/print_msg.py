@@ -1,10 +1,13 @@
 from services.base_service import BaseServicePlugin
 from core.event_bus import EventName
 from datetime import datetime
+from core.forfun import banner
 
 
 class ExampleLogPrintService(BaseServicePlugin):
     async def setup(self):
+        print(banner + "\n")
+        print("[SYSTEM] 🚀 Starting TempusOne Engine...")
         events = []
         for name in dir(EventName):
             if not name.startswith("__"):

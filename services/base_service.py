@@ -12,6 +12,9 @@ class BaseServicePlugin:
         """Gọi khi service được trigger"""
         pass
 
+    def build_payload(self, **kwargs):
+        pass
+
     async def handle_event(self, event_name, data):
         """Đăng ký xử lý event"""
         pass
