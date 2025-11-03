@@ -1,10 +1,10 @@
 import os
 import pandas as pd
-from services.base_service import BaseServicePlugin
+from services.data.base_data import BaseDataServicePlugin
 from core.event_bus import EventName
 
 
-class DataServiceExampleCsv(BaseServicePlugin):
+class DataServiceExampleCsv(BaseDataServicePlugin):
     def __init__(self, name, event_bus, config=None):
         self.start_from = 0
         self.csv_file = "VN30F1M_5m.csv"
@@ -27,12 +27,9 @@ class DataServiceExampleCsv(BaseServicePlugin):
 
     async def run(self):
         start_row = self.start_from
-        to_row = start_row + 50
+        to_row = start_row + 350
         if to_row < len(self.df):
             self.start_from = self.start_from + 1
             subset = self.df.iloc[start_row: to_row]
-            event_data = {"service_name": self.name, "event_name": EventName.DATA_NEW,
-                          "symbol": "VN30F1M", "df": subset}
-            # await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] Get new dataframe")
-            # await self.bus.publish(EventName.LOG_ADD, f"[{self.name}] {subset.index[-1]}")
+            event_data = self.build_data(symbol="VN30F1M", df=subset)
             await self.bus.publish(EventName.DATA_NEW, event_data)

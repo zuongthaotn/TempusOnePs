@@ -19,15 +19,6 @@ async def main():
         for se in services.get("data", []):
             await se.run()
 
-        for se in services.get("signals", []):
-            await se.run()
-
-        for se in services.get("execution", []):
-            await se.run()
-
-        for se in services.get("log", []):
-            await se.run()
-
     cron_expr = config.get("cron")
     interval = config.get("interval", None)
     scheduler = Scheduler(interval=interval, cron_expr=cron_expr, callback=run_pipeline)

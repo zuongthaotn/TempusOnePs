@@ -26,32 +26,34 @@ class ExampleLogFileService(BaseServicePlugin):
             self.bus.subscribe(ev, self.do_trigger)
         await self.write_log(f"Log plugin [{self.name}] initialized and subscribe: {events}")
 
-    async def do_trigger(self, msg):
-        if isinstance(msg, str):
-            await self.write_log(f"Log msg: {msg}")
+    async def do_trigger(self, data):
+        if isinstance(data, str):
+            await self.write_log(f"Log data: {data}")
         else:
-            if msg['event_name'] == EventName.DATA_NEW:
-                if len(msg['df']):
-                    last_row = msg['df'].iloc[-1]
-                    await self.write_log(f"[{msg['service_name']}] "
-                                         f"[{msg['event_name']}] Get new dataframe")
-                    await self.write_log(f"[{msg['service_name']}] "
-                                         f"[{msg['event_name']}] Last data: \nTime: {msg['df'].index[-1]}, "
+            # await self.write_log(str(data))
+            if data['event_name'] == EventName.DATA_NEW:
+                if len(data['df']):
+                    last_row = data['df'].iloc[-1]
+                    await self.write_log(f"[{data['service_name']}] "
+                                         f"[{data['event_name']}] Get new dataframe")
+                    await self.write_log(f"[{data['service_name']}] "
+                                         f"[{data['event_name']}] Last data: \nTime: {data['df'].index[-1]}, "
                                          f"Open: {last_row['Open']}, Close: {last_row['Close']}, "
                                          f"High: {last_row['High']}, Low: {last_row['Low']}")
                 else:
-                    await self.write_log(f"[{msg['service_name']}] "
-                                         f"[{msg['event_name']}] Got issue when getting new data")
-            elif msg['event_name'] == EventName.SIGNAL_GENERATED:
-                await self.write_log(f"[{msg['service_name']}] [{msg['event_name']}] dispatched. "
-                                     f"Symbol: {msg['symbol']}. Signal: {msg['signal']}")
-            elif msg['event_name'] == EventName.ORDER_NEW:
-                await self.write_log(f"[{msg['service_name']}] [{msg['event_name']}] dispatched. "
+                    await self.write_log(f"[{data['service_name']}] "
+                                         f"[{data['event_name']}] Got issue when getting new data")
+            elif data['event_name'] == EventName.SIGNAL_GENERATED:
+                signal = data['payload']['signal'] if data['payload'] is not None else None
+                await self.write_log(f"[{data['service_name']}] [{data['event_name']}] dispatched. "
+                                     f"Symbol: {data['symbol']}. Signal: {signal}")
+            elif data['event_name'] == EventName.ORDER_NEW:
+                await self.write_log(f"[{data['service_name']}] [{data['event_name']}] dispatched. "
                                      f"call API & created new order")
 
-    async def write_log(self, msg):
+    async def write_log(self, data):
         cur_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        await self.log_file.write(cur_time + " " + msg + "\n")
+        await self.log_file.write(cur_time + " " + data + "\n")
         await self.log_file.flush()
 
     async def teardown(self):
