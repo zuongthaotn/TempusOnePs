@@ -1,5 +1,5 @@
 from datetime import datetime
-from services.base_service import BaseServicePlugin
+from services.execution.base_execution import BaseExecutionServicePlugin
 from core.event_bus import EventName
 
 BUY_SIGNAL = 'long'
@@ -106,26 +106,27 @@ class Broker:
         self.trigger_after()
 
 
-class SimpleWorkerExecutionService(BaseServicePlugin):
+class SimpleWorkerExecutionService(BaseExecutionServicePlugin):
     def __init__(self, name, event_bus, config=None):
         self.broker = None
         super(SimpleWorkerExecutionService, self).__init__(name, event_bus, config=config)
 
-    async def setup(self):
-        self.broker = Broker()
-        await self.bus.publish(EventName.LOG_ADD,
-                               f"Execution plugin [{self.name}] initialized and subscribe {EventName.SIGNAL_GENERATED}")
-        self.bus.subscribe(EventName.SIGNAL_GENERATED, self.on_signal)
-
-    async def on_signal(self, signal_data):
-        if signal_data["signal"]:
-            if signal_data["signal"] == BUY_SIGNAL:
-                self.broker.open_long_deal(1234)
-            elif signal_data["signal"] == SELL_SIGNAL:
-                self.broker.open_short_deal(1234)
-            if signal_data["signal"] == CLOSE_SIGNAL:
-                if self.broker.has_opened_deal():
-                    self.broker.close_all_open_deal()
-            order = {"service_name": self.name, "event_name": EventName.ORDER_NEW,
-                     "symbol": signal_data["symbol"], "signal": signal_data["signal"]}
-            await self.bus.publish(EventName.ORDER_NEW, order)
+    async def with_signal(self, signal_data):
+        if signal_data["payload"] is not None:
+            if signal_data["payload"]["signal"] is not None and signal_data["payload"]["signal"] != "":
+                signal = signal_data["payload"]["signal"]
+                current_price = signal_data["payload"]["Close"]
+                payload = None
+                if current_price:
+                    if signal == BUY_SIGNAL:
+                        self.broker.open_long_deal(current_price)
+                        payload = {"price": current_price, "signal": signal, "order_side": LONG_DEAL_TYPE}
+                    elif signal == SELL_SIGNAL:
+                        self.broker.open_short_deal(current_price)
+                        payload = {"price": current_price, "signal": signal, "order_side": SHORT_DEAL_TYPE}
+                    if signal == CLOSE_SIGNAL:
+                        if self.broker.has_opened_deal():
+                            self.broker.close_all_open_deal()
+                            payload = {"price": current_price, "signal": signal}
+                    order_data = self.build_data(symbol=signal_data["symbol"], payload=payload)
+                    await self.bus.publish(EventName.ORDER_NEW, order_data)

@@ -28,7 +28,7 @@ class ExampleLogFileService(BaseServicePlugin):
 
     async def do_trigger(self, data):
         if isinstance(data, str):
-            await self.write_log(f"Log data: {data}")
+            await self.write_log(data)
         else:
             # await self.write_log(str(data))
             if data['event_name'] == EventName.DATA_NEW:

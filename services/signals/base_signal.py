@@ -3,6 +3,15 @@ from services.base_service import BaseServicePlugin
 from core.event_bus import EventName
 
 
+DEFAULT_SIGNAL_PAYLOAD = {
+    "signal": None,
+    "Close": None,
+    "Open": None,
+    "High": None,
+    "Low": None
+}
+
+
 class SignalConfig:
     BUY_SIGNAL = "buy"
     SELL_SIGNAL = "sell"
@@ -23,11 +32,14 @@ class BaseSignalPlugin(BaseServicePlugin):
         pass
 
     def build_data(self, **kwargs):
+        payload = kwargs.get("payload", None)
+        if payload is not None:
+            payload = DEFAULT_SIGNAL_PAYLOAD | payload
         return {
             "timestamp": datetime.now().isoformat(),
             "service_name": self.name,
             "event_name": EventName.SIGNAL_GENERATED,
             "symbol": kwargs.get("symbol"),
             "algo_version": kwargs.get("algo_version"),
-            "payload": kwargs.get("payload", None)
+            "payload": payload
         }
