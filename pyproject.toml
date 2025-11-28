@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tempusoneps"
+version = "0.1.0"
+description = "Modular, Connectable, and Scalable Quant & Algo Trading Platform"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+  {name = "TempusOnePs Team"}
+]
+dependencies = [
+    "numpy",
+    "pandas",
+    "pandas-ta",
+    "requests",
+    "python-dateutil",
+    "croniter",
+    "backtesting",
+    "matplotlib"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "lib*", "modules*"]
+namespaces = true

@@ -1,6 +1,3 @@
-from datetime import datetime
-from datetime import date
-from dateutil.relativedelta import relativedelta
 import requests
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36', 'Origin': 'https://iboard.ssi.com.vn'}
@@ -44,6 +41,7 @@ entrade_headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36 Edg/114.0.1788.0'
     }
 DNSE_DATA_HISTORY_URL = 'https://services.entrade.com.vn/chart-api/v2/ohlcs/derivative'
+DNSE_DATA_HISTORY_URL_V2 = 'https://api.dnse.com.vn/chart-api/v2/ohlcs/derivative'
 #
 VPS_DATA_HISTORY_URL = 'https://histdatafeed.vps.com.vn/tradingview/history'
 vps_headers = {
@@ -63,17 +61,17 @@ vps_headers = {
     }
 
 
-def getDataFromSSI(params):
+def get_data_from_ssi(params):
     return requests.get(SSI_DATA_HISTORY_URL, params=params, headers=SSI_HEADERS, timeout=7)
 
 
-def getDataFromVnDirect(params):
+def get_data_from_vndrirect(params):
     return requests.get(VNDIRECT_DATA_HISTORY_URL, params=params, headers=HEADERS)
 
 
-def getDataFromDNSE(params):
+def get_data_from_dnse(params):
     params.update({'symbol': 'VN30F1M'})
-    return requests.get(DNSE_DATA_HISTORY_URL, params=params, headers=HEADERS, timeout=7)
+    return requests.get(DNSE_DATA_HISTORY_URL_V2, params=params, headers=HEADERS, timeout=7)
 
 
 def get_data_from_vps(params):
@@ -81,39 +79,7 @@ def get_data_from_vps(params):
     return requests.get(VPS_DATA_HISTORY_URL, params=params, headers=vps_headers, timeout=7)
 
 
-def getStockHistoryData(ticker, timestamp_from=0, timestamp_to=0):
-    if timestamp_from == 0:
-        three_months = date.today() + relativedelta(months=-3)
-        timestamp_from = datetime.strptime(three_months.strftime("%m/%d/%Y") + ', 00:00:0', "%m/%d/%Y, %H:%M:%S") \
-            .timestamp()
-    if timestamp_to == 0:
-        timestamp_to = datetime.strptime(date.today().strftime("%m/%d/%Y") + ', 23:59:00', "%m/%d/%Y, %H:%M:%S") \
-            .timestamp()
-
-    response = getDataFromSSI(ticker, timestamp_from, timestamp_to)
-
-    import numpy as np
-    import pandas as pd
-
-    timestamp = np.array(response['t']).astype(int)
-    close = np.array(response['c']).astype(float)
-    open = np.array(response['o']).astype(float)
-    high = np.array(response['h']).astype(float)
-    low = np.array(response['l']).astype(float)
-    volume = np.array(response['v']).astype(int)
-
-    dataset = pd.DataFrame({'Time': timestamp, 'Open': list(open), 'High': list(high), 'Low': list(low),
-                            'Close': list(close), 'Volume': list(volume)},
-                           columns=['Time', 'Open', 'High', 'Low', 'Close', 'Volume'])
-    return dataset
-
-
-def getAllStockHistoryData(ticker):
-    timestamp_to = datetime.strptime(date.today().strftime("%m/%d/%Y") + ', 23:59:00', "%m/%d/%Y, %H:%M:%S").timestamp()
-    return getStockHistoryData(ticker, 1, timestamp_to)
-
-
-def getVN30HistoryDataByMinute(ticker="VN30F1M", resolution=1, from_=1, broker='DNSE', keep_time=False):
+def get_vn30f1m_ohcl_history_data(ticker="VN30F1M", resolution=1, from_=1, broker='DNSE', keep_time=False):
     # using time module
     import time
     from datetime import datetime
@@ -128,13 +94,13 @@ def getVN30HistoryDataByMinute(ticker="VN30F1M", resolution=1, from_=1, broker='
 
     try:
         if broker == 'DNSE':
-            x = getDataFromDNSE(params)
+            x = get_data_from_dnse(params)
         elif broker == 'SSI':
-            x = getDataFromSSI(params)
+            x = get_data_from_ssi(params)
         elif broker == 'VPS':
             x = get_data_from_vps(params)
         else:
-            x = getDataFromVnDirect(params)
+            x = get_data_from_vndrirect(params)
     except requests.exceptions.Timeout:
         print('Time out.')
         return []

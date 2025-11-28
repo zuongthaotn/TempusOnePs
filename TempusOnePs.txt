@@ -16,23 +16,31 @@ $$$$$$$$/______   _____  ____    ______   __    __   _______ /$$$$$$  | _______ 
 📦 TempusOnePs/
 │
 ├── config/
-│   └── config.json               # define pipeline(files & Classes) and time interval
+│   ├── config.json               # Pipeline definition & scheduling
+│   └── config.sample.json
 │
 ├── core/
-│   ├── event_bus.py              # publish/subscribe events
-│   ├── scheduler.py              # Job loop / 5-min timer
-│   └── service_loader.py         # load service dynamically
-│   └── utils.py                  # read config and some other core functions
+│   ├── event_bus.py              # Event bus implementation
+│   ├── scheduler.py              # Job scheduler (cron/interval)
+│   ├── service_loader.py         # Dynamic service loader
+│   ├── utils.py                  # Utility functions
+│   └── service/                  # Base classes for services
+│       ├── base_service.py       # Base service class
+│       ├── base_signal.py        # Base signal class
+│       └── base_execution.py     # Base execution class
 │
-├── services/
-│   ├── base_service.py           # Base class for all service
-│   ├── data                      # fetch & update data
-│   ├── signals                   # generate trading signals
-│   ├── execution                 # simulate or send order, create deal
-│   ├── log                       # store logs or push to DB
-│   └── monitoring                # optional: collect metrics, dashboard, chart, analytics
+├── lib/                          # External libraries & APIs
+│   ├── brokers/                  # Broker integrations (DNSE, Entrade)
+│   ├── stock_price_patterns/     # Candlestick pattern recognition
+│   └── telegram_api.py           # Telegram integration
 │
-└── run.py                        # entrypoint
-├── requirements.txt
-├── pyproject.toml or setup.py
+├── modules/                      # Service implementations (Data, Signals, Execution, Log)
+│   ├── examples/                 # Example services
+│   └── magnus/                   # Magnus module
+│
+├── tools/                        # Utility scripts
+│
+├── run.py                        # Main entry point (single run)
+├── run-cron.py                   # Scheduler entry point
+├── pyproject.toml                # Project configuration & dependencies
 └── README.md

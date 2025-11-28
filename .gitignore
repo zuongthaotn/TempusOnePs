@@ -4,7 +4,6 @@ venv
 .env
 **/__pycache__/
 *.pyc
-*.csv
 *.log
 .DS_store
 .vscode
@@ -13,5 +12,5 @@ config/config.json
 **-private.sh
 # Ignore all modules
 modules/*
-# But keep default module
-!modules/default/
+# But keep example modules
+!modules/examples/
