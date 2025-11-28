@@ -1,0 +1,16 @@
+.idea
+venv
+.ipynb_checkpoints
+.env
+**/__pycache__/
+*.pyc
+*.log
+.DS_store
+.vscode
+config/config.json
+**-private.py
+**-private.sh
+# Ignore all modules
+modules/*
+# But keep example modules
+!modules/examples/
