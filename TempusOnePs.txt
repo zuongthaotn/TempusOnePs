@@ -20,7 +20,6 @@ $$$$$$$$/______   _____  ____    ______   __    __   _______ /$$$$$$  | _______ 
 │   └── config.sample.json
 │
 ├── core/
-│   ├── event_bus.py              # Event bus implementation
 │   ├── scheduler.py              # Job scheduler (cron/interval)
 │   ├── service_loader.py         # Dynamic service loader
 │   ├── utils.py                  # Utility functions
@@ -29,14 +28,15 @@ $$$$$$$$/______   _____  ____    ______   __    __   _______ /$$$$$$  | _______ 
 │       ├── base_signal.py        # Base signal class
 │       └── base_execution.py     # Base execution class
 │
+├── docs/                         # Documentation
+│
 ├── lib/                          # External libraries & APIs
 │   ├── brokers/                  # Broker integrations (DNSE, Entrade)
 │   ├── stock_price_patterns/     # Candlestick pattern recognition
 │   └── telegram_api.py           # Telegram integration
 │
 ├── modules/                      # Service implementations (Data, Signals, Execution, Log)
-│   ├── examples/                 # Example services
-│   └── magnus/                   # Magnus module
+│   └── examples/                 # Example services
 │
 ├── tools/                        # Utility scripts
 │
