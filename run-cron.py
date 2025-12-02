@@ -1,7 +1,6 @@
 import argparse
 from core.utils import load_config
 from core.service_loader import load_services
-from core.scheduler import Scheduler
 from core.log_queue import TempusOnePsLogQueue
 from core.service.base_signal import TempusOnePsSignal
 
@@ -33,22 +32,23 @@ def main():
         for se in services.get("data", []):
             df = se.run()
 
+        signals_output = None
         if df is not None:
             # 2. SIGNALS (multiprocess)
             signal_services = services.get("signals", [])
             tops = TempusOnePsSignal(signal_services, df, log_queue)
             signals_output = tops.run()
 
-            # 3. EXECUTION
-            for se in services.get("execution", []):
-                se.run(signals_output)
+        # 3. EXECUTION
+        for se in services.get("execution", []):
+            se.run(signals_output)
 
-            # 4. LOG
-            for se in services.get("log", []):
-                se.run()
+        # 4. LOG
+        for se in services.get("log", []):
+            se.run()
 
-            # 5. clear log queue
-            log_queue.clear_all()
+        # 5. clear log queue
+        log_queue.clear_all()
 
     run_pipeline()
 

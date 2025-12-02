@@ -50,6 +50,8 @@ class TempusOnePsSignal:
         #
         df_merged = self.df
         for r in results:
+            if r["data"] is None:
+                continue
             df_merged = df_merged.merge(r["data"], left_index=True, right_index=True, how='inner')
             self.add_log_queue(r["data"], r["meta_data"]["service_name"], "result")
         #
