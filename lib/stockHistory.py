@@ -202,7 +202,7 @@ def get_new_vn30f1m_ticker():
 
         if cross_thursday_time >= 3:
             t = datetime.now().month + 1
-            y = datetime.now().strftime('%y')
+            y = datetime.now().strftime('%Y')
             if t > 12:
                 t = "1"
                 current_year = int(y) + 1

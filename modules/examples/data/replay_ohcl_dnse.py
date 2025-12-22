@@ -10,21 +10,22 @@ from lib.stockHistory import get_vn30f1m_ohcl_history_data
 
 class DataReplayServiceExample(BaseServicePlugin):
     def __init__(self, name, config=None, log_queue=None, mode='live'):
-        self.start_from = 0
+        self.to_row = 0
         self.df = None
         super().__init__(name, config=config, log_queue=log_queue, mode=mode)
 
     def setup(self):
-        self.df = self.get_stock_data().tail(370)
+        self.df = self.get_stock_data()
 
     def run(self):
         if self.df is not None:
-            start_row = self.start_from
-            to_row = start_row + 350
-            if to_row < len(self.df):
-                self.start_from = self.start_from + 1
-                df = self.df.iloc[: to_row]
-                self.trigger_after(df, "ema_cross")
+            if not self.to_row:
+                self.to_row = len(self.df) - 152
+            else:
+                self.to_row = self.to_row + 1
+            if self.to_row < len(self.df):
+                df = self.df.iloc[: self.to_row]
+                self.trigger_after(df, "mix")
                 return df
             else:
                 exit()

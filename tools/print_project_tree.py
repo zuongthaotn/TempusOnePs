@@ -18,4 +18,4 @@ def print_tree(start_path='.', prefix=''):
 
 if __name__ == "__main__":
     print("📁 TempusOnePs:")
-    print_tree("..")
+    print_tree(".")
